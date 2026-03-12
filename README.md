@@ -35,9 +35,17 @@ Hobby Tracker, kullanıcıların oynadıkları oyunları, okudukları kitapları
     *   [RAWG API](https://rawg.io/apidocs) (Oyunlar)
 *   **Paketler**: `Newtonsoft.Json`, `RestSharp`, `FirebaseAuthentication.net`, `FirebaseDatabase.net`
 
-## 🚀 Kurulum (Geliştiriciler İçin)
+## 🚀 Kurulum ve Kullanım (Son Kullanıcılar İçin)
 
-Projeyi kendi bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyin:
+Projenin derlenmiş bir `Setup.exe` sürümü mevcut olsa da, **uygulamanın çalışabilmesi için harici API servislerine (TMDB, RAWG, Firebase) bağlanması gerekmektedir.**
+
+Güvenlik sebebiyle bu API anahtarları kurulum dosyasına dahil edilmemiştir. Uygulamayı kurduktan sonra kullanabilmek için, programın kurulu olduğu dizine giderek (örn: `C:\Program Files\HobbyTracker`) bir **`secrets.json`** dosyası oluşturmanız ve içerisine kendi API anahtarlarınızı girmeniz gerekmektedir (Aşağıdaki Geliştiriciler İçin bölümündeki JSON formatına bakınız). Aksi takdirde uygulama verileri çekemeyecektir.
+
+---
+
+## 💻 Kurulum (Geliştiriciler İçin)
+
+Projeyi kendi bilgisayarınızda derleyip çalıştırmak için aşağıdaki adımları izleyin:
 
 ### 1- Depoyu Klonlayın
 ```bash
