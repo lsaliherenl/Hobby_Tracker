@@ -4,7 +4,18 @@ Hobby Tracker, kullanıcıların oynadıkları oyunları, okudukları kitapları
 
 Şık, karanlık temalı (dark mode) tasarımı, akıcı animasyonları ve detaylı istatistik panelleriyle hobilerinizi arşivlemenin en keyifli yolunu sunar.
 
-![HobbyTracker Ekran Görüntüsü](HobbyTracker/ZImages/dashboard.png) *(Eğer uygulamanın ekran görüntüsü varsa buranın bağlantısını güncelleyebilirsiniz)*
+![Kayıt Ekranı](HobbyTracker/ZImages/AppView/KayitOlmaEkrani.png)
+*(Daha fazla detay için [HobbyTracker Proje Dokümantasyonu](HobbyTracker_Proje_Dokumantasyonu.md) dosyasını inceleyebilirsiniz.)*
+
+## 📸 Ekran Görüntüleri
+
+| Genel Bakış (Oyunlar) | Oyunlar (Sekme) |
+|---|---|
+| ![Genel Bakış](HobbyTracker/ZImages/AppView/GenelBakis_Oyunlar.png) | ![Oyunlar](HobbyTracker/ZImages/AppView/OyunlarAnaSayfasi_Sekme.png) |
+
+| Filmler (Sekme) | Kitaplar (Detay) |
+|---|---|
+| ![Filmler](HobbyTracker/ZImages/AppView/FilmlerAnaSayfasi_Sekme.png) | ![Kitaplar](HobbyTracker/ZImages/AppView/KitaplarDetaySayfasi.png) |
 
 ## ✨ Özellikler
 
