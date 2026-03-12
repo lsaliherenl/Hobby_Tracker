@@ -1,0 +1,145 @@
+﻿<dx:ThemedWindow
+    x:Class="HobbyTracker.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    
+    Title="HobbyTracker" 
+    Icon="/HT.ico"
+    Height="900" Width="1400"
+    WindowState="Maximized" 
+    
+    WindowStartupLocation="CenterScreen" 
+    WindowStyle="None" 
+    AllowsTransparency="True"
+    MouseDown="Window_MouseDown">
+
+    <Grid Background="#FF0C111A">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" BorderBrush="#334155" BorderThickness="0,0,1,0" Background="#FF1A2230">
+            <Grid>
+                <StackPanel Margin="20">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,40">
+                        <Border Width="40" Height="40" CornerRadius="10" Background="#3b82f6">
+                            <TextBlock Text="HT" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+                        </Border>
+                        <StackPanel Margin="15,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="HobbyTracker" Foreground="White" FontWeight="Bold" FontSize="16"/>
+                            <TextBlock Text="Medyalarınızı yönetin" Foreground="#94a3b8" FontSize="11"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <dx:SimpleButton x:Name="BtnDashboard" Content="Genel Bakış" Click="BtnDashboard_Click" 
+                                     Style="{StaticResource AnimatedSimpleButtonStyle}"
+                                     Glyph="/ZImages/view-dashboard.svg"
+                                     Height="45" HorizontalContentAlignment="Left" 
+                                     Background="#3b82f6" Foreground="White" 
+                                     CornerRadius="8" BorderThickness="0" Margin="0,0,0,10" FontSize="14" FontWeight="SemiBold" Padding="15,0"/>
+
+                    <dx:SimpleButton x:Name="BtnGames" Content="Oyunlar" Click="BtnGames_Click" 
+                                     Style="{StaticResource AnimatedSimpleButtonStyle}"
+                                     Height="45" HorizontalContentAlignment="Left" 
+                                     Background="Transparent" Foreground="#cbd5e1" 
+                                     CornerRadius="8" BorderThickness="0" Margin="0,0,0,5" FontSize="14" Padding="15,0">
+                        <dx:SimpleButton.Glyph>/ZImages/controller.svg</dx:SimpleButton.Glyph>
+                    </dx:SimpleButton>
+
+                    <dx:SimpleButton x:Name="BtnBooks" Content="Kitaplar" Click="BtnBooks_Click" 
+                                     Style="{StaticResource AnimatedSimpleButtonStyle}"
+                                     Height="45" HorizontalContentAlignment="Left" 
+                                     Background="Transparent" Foreground="#cbd5e1" 
+                                     CornerRadius="8" BorderThickness="0" Margin="0,0,0,5" FontSize="14" Padding="15,0">
+                        <dx:SimpleButton.Glyph>/ZImages/book.svg</dx:SimpleButton.Glyph>
+                    </dx:SimpleButton>
+
+                    <dx:SimpleButton x:Name="BtnMovies" Content="Filmler" Click="BtnMovies_Click" 
+                                     Style="{StaticResource AnimatedSimpleButtonStyle}"
+                                     Height="45" HorizontalContentAlignment="Left" 
+                                     Background="Transparent" Foreground="#cbd5e1" 
+                                     CornerRadius="8" BorderThickness="0" Margin="0,0,0,5" FontSize="14" Padding="15,0">
+                        <dx:SimpleButton.Glyph>/ZImages/movie.svg</dx:SimpleButton.Glyph>
+                    </dx:SimpleButton>
+
+                    <dx:SimpleButton x:Name="BtnSeries" Content="Diziler / Animeler" Click="BtnSeries_Click" 
+                                     Style="{StaticResource AnimatedSimpleButtonStyle}"
+                                     Height="45" HorizontalContentAlignment="Left" 
+                                     Background="Transparent" Foreground="#cbd5e1" 
+                                     CornerRadius="8" BorderThickness="0" Margin="0,0,0,5" FontSize="14" Padding="15,0">
+                        <dx:SimpleButton.Glyph>/ZImages/television.svg</dx:SimpleButton.Glyph>
+                    </dx:SimpleButton>
+                </StackPanel>
+
+                <StackPanel VerticalAlignment="Bottom" Margin="20">
+                    <Separator Background="#334155" Margin="0,0,0,20"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="40" Height="40" CornerRadius="20" Background="#475569">
+                            <dx:DXImage Margin="5" Source="/ZImages/account_circle.png"/>
+                        </Border>
+                        <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="TxtCurrentUser" Text="Kullanıcı İsmi" Foreground="White" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <dx:SimpleButton Glyph="/ZImages/cog.svg" Background="Transparent" Width="57" Height="28" CornerRadius="15" BorderThickness="0" Margin="20,0,0,0" Opacity="0.5" HorizontalContentAlignment="Right"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1">
+
+            <ContentControl x:Name="MainContent"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,8,8,0">
+                <dx:SimpleButton Width="34" Height="26" Background="Transparent" CornerRadius="4" BorderThickness="0"
+                                 Click="BtnMinimize_Click" Cursor="Hand" Margin="0,0,4,0"
+                                 GlyphWidth="10" GlyphHeight="10">
+                    <dx:SimpleButton.Glyph>/ZImages/minimize.svg</dx:SimpleButton.Glyph>
+                    <dx:SimpleButton.Style>
+                        <Style TargetType="dx:SimpleButton">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#334155"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </dx:SimpleButton.Style>
+                </dx:SimpleButton>
+
+                <dx:SimpleButton Width="34" Height="26" Background="Transparent" CornerRadius="4" BorderThickness="0"
+                                 Click="BtnMaximize_Click" Cursor="Hand" Margin="0,0,4,0"
+                                 GlyphWidth="10" GlyphHeight="10">
+                    <dx:SimpleButton.Glyph>/ZImages/stack.svg</dx:SimpleButton.Glyph>
+                    <dx:SimpleButton.Style>
+                        <Style TargetType="dx:SimpleButton">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#334155"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </dx:SimpleButton.Style>
+                </dx:SimpleButton>
+
+                <dx:SimpleButton Width="34" Height="26" Background="Transparent" CornerRadius="4" BorderThickness="0"
+                                 Click="BtnClose_Click" Cursor="Hand"
+                                 GlyphWidth="10" GlyphHeight="10">
+                    <dx:SimpleButton.Glyph>/ZImages/close.svg</dx:SimpleButton.Glyph>
+                    <dx:SimpleButton.Style>
+                        <Style TargetType="dx:SimpleButton">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#c42b1c"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </dx:SimpleButton.Style>
+                </dx:SimpleButton>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</dx:ThemedWindow>

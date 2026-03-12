@@ -1,0 +1,147 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>HT.ico</ApplicationIcon>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>    <None Remove="ZImages\account_circle.png" />    <None Remove="ZImages\account_circle.svg" />    <None Remove="ZImages\add.svg" />    <None Remove="ZImages\arrow_back.svg" />    <None Remove="ZImages\arrow_forward.svg" />
+    <None Remove="ZImages\book-multiple.svg" />
+    <None Remove="ZImages\book.svg" />
+    <None Remove="ZImages\calendar.png" />
+    <None Remove="ZImages\calendar.svg" />
+    <None Remove="ZImages\check.svg" />
+    <None Remove="ZImages\clock.svg" />
+    <None Remove="ZImages\close.svg" />
+    <None Remove="ZImages\cog.svg" />
+    <None Remove="ZImages\controller.svg" />
+    <None Remove="ZImages\defBook.jpg" />
+    <None Remove="ZImages\defGame.jpg" />
+    <None Remove="ZImages\edit_note.png" />
+    <None Remove="ZImages\edit_note.svg" />
+    <None Remove="ZImages\filter_list.svg" />
+    <None Remove="ZImages\gameSearch_background.jpg" />
+    <None Remove="ZImages\gameSearch_Vertical.jpg" />
+    <None Remove="ZImages\google.svg" />
+    <None Remove="ZImages\google_new.svg" />
+    <None Remove="ZImages\grid_view.svg" />
+    <None Remove="ZImages\laptop.svg" />
+    <None Remove="ZImages\login-bg.png" />
+    <None Remove="ZImages\mail.svg" />
+    <None Remove="ZImages\minimize.svg" />
+    <None Remove="ZImages\movie.svg" />
+    <None Remove="ZImages\pencil.png" />
+    <None Remove="ZImages\pencil.svg" />
+    <None Remove="ZImages\playstation.svg" />
+    <None Remove="ZImages\sample_cover.jpg" />
+    <None Remove="ZImages\save.svg" />
+    <None Remove="ZImages\search.svg" />
+    <None Remove="ZImages\search_png.png" />
+    <None Remove="ZImages\sort.svg" />
+    <None Remove="ZImages\stack.svg" />
+    <None Remove="ZImages\star.png" />
+    <None Remove="ZImages\star.svg" />
+    <None Remove="ZImages\switch.svg" />
+    <None Remove="ZImages\television.svg" />
+    <None Remove="ZImages\view-dashboard.svg" />
+    <None Remove="ZImages\view_list.svg" />
+    <None Remove="ZImages\visibility.svg" />
+    <None Remove="ZImages\visibility_off.svg" />
+    <None Remove="ZImages\xbox.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="HT.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="DevExpress.Wpf" Version="25.1.7" />
+    <PackageReference Include="DevExpress.Wpf.Accordion" Version="25.1.7" />
+    <PackageReference Include="DevExpress.Wpf.Charts" Version="25.1.7" />
+    <PackageReference Include="DevExpress.Wpf.Core" Version="25.1.7" />
+    <PackageReference Include="DevExpress.Wpf.Grid" Version="25.1.7" />
+    <PackageReference Include="DevExpress.Wpf.Grid.Core" Version="25.1.7" />
+    <PackageReference Include="DevExpress.Wpf.LayoutControl" Version="25.1.7" />
+    <PackageReference Include="DevExpress.Wpf.Themes.All" Version="25.1.7" />
+    <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
+    <PackageReference Include="FirebaseDatabase.net" Version="5.0.0" />
+
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="RestSharp" Version="113.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="firebase_config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>    <Resource Include="ZImages\account_circle.png" />    <Resource Include="ZImages\account_circle.svg" />    <Resource Include="ZImages\add.svg" />    <Resource Include="ZImages\arrow_back.svg" />    <Resource Include="ZImages\arrow_forward.svg" />
+    <Resource Include="ZImages\book-multiple.svg" />
+    <Resource Include="ZImages\book.svg" />
+    <Resource Include="ZImages\calendar.png" />
+    <Resource Include="ZImages\calendar.svg" />
+    <Resource Include="ZImages\check.svg" />
+    <Resource Include="ZImages\clock.svg" />
+    <Resource Include="ZImages\close.svg" />
+    <Resource Include="ZImages\cog.svg" />
+    <Resource Include="ZImages\controller.svg" />
+    <Resource Include="ZImages\defBook.jpg" />
+    <Resource Include="ZImages\defGame.jpg" />
+    <Resource Include="ZImages\edit_note.png" />
+    <Resource Include="ZImages\edit_note.svg" />
+    <Resource Include="ZImages\filter_list.svg" />
+    <Resource Include="ZImages\gameSearch_background.jpg" />
+    <Resource Include="ZImages\gameSearch_Vertical.jpg" />
+    <Resource Include="ZImages\google.svg" />
+    <Resource Include="ZImages\google_new.svg" />
+    <Resource Include="ZImages\grid_view.svg" />
+    <Resource Include="ZImages\laptop.svg" />
+    <Resource Include="ZImages\login-bg.png" />
+    <Resource Include="ZImages\mail.svg" />
+    <Resource Include="ZImages\minimize.svg" />
+    <Resource Include="ZImages\movie.svg" />
+    <Resource Include="ZImages\pencil.png" />
+    <Resource Include="ZImages\pencil.svg" />
+    <Resource Include="ZImages\playstation.svg" />
+    <Resource Include="ZImages\sample_cover.jpg" />
+    <Resource Include="ZImages\save.svg" />
+    <Resource Include="ZImages\search.svg" />
+    <Resource Include="ZImages\search_png.png" />
+    <Resource Include="ZImages\sort.svg" />
+    <Resource Include="ZImages\stack.svg" />
+    <Resource Include="ZImages\star.png" />
+    <Resource Include="ZImages\star.svg" />
+    <Resource Include="ZImages\switch.svg" />
+    <Resource Include="ZImages\television.svg" />
+    <Resource Include="ZImages\view-dashboard.svg" />
+    <Resource Include="ZImages\view_list.svg" />
+    <Resource Include="ZImages\visibility.svg" />
+    <Resource Include="ZImages\visibility_off.svg" />
+    <Resource Include="ZImages\xbox.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ZImages\AppView\" />
+  </ItemGroup>
+
+
+</Project>

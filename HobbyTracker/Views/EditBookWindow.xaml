@@ -1,0 +1,467 @@
+<Window x:Name="EditBookPage" x:Class="HobbyTracker.Views.EditBookWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        
+        Title="Kitap Düzenle" 
+        Icon="/HT.ico"
+        Height="850" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        Background="Transparent"
+        Loaded="Window_Loaded">
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="MainBorder" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.4">
+                         <DoubleAnimation.EasingFunction>
+                            <CubicEase EasingMode="EaseOut"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetName="MainScale" Storyboard.TargetProperty="ScaleX" From="0.9" To="1" Duration="0:0:0.4">
+                        <DoubleAnimation.EasingFunction>
+                            <BackEase EasingMode="EaseOut" Amplitude="0.3"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetName="MainScale" Storyboard.TargetProperty="ScaleY" From="0.9" To="1" Duration="0:0:0.4">
+                        <DoubleAnimation.EasingFunction>
+                            <BackEase EasingMode="EaseOut" Amplitude="0.3"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="PrimaryBlue" Color="#2b6cee"/>
+        <SolidColorBrush x:Key="BgDark" Color="#FF0C111A"/>
+        <SolidColorBrush x:Key="PanelDark" Color="#1a2230"/>
+        <SolidColorBrush x:Key="TextGray" Color="#92a4c9"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#2a3447"/>
+
+        <Style x:Key="DarkComboItemStyle" TargetType="dxe:ComboBoxEditItem">
+            <Setter Property="Foreground" Value="#cbd5e1"/>
+            <Setter Property="Background" Value="#111722"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2b6cee"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#1a2230"/>
+                    <Setter Property="Foreground" Value="#2b6cee"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="NoFocusTextEditStyle" TargetType="dxe:TextEdit">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#324467"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Modern Add/Edit Book Progress Bar Style -->
+        <Style x:Key="AddBookProgressBarStyle" TargetType="ProgressBar">
+            <Setter Property="Height" Value="6"/>
+            <Setter Property="MinHeight" Value="6"/>
+            <Setter Property="MaxHeight" Value="6"/>
+            <Setter Property="Background" Value="#232f48"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryBlue}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Grid x:Name="TemplateRoot">
+                            <Border x:Name="PART_Track" Background="{TemplateBinding Background}" CornerRadius="3" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"/>
+                            <Border x:Name="PART_Indicator" HorizontalAlignment="Left" Background="{TemplateBinding Foreground}" CornerRadius="3">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#2b6cee" BlurRadius="6" ShadowDepth="0" Opacity="0.3"/>
+                                </Border.Effect>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid x:Name="GridRoot">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.00001*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="0.00001*"/>
+                            </Grid.RowDefinitions>
+                            <Track x:Name="PART_Track" Grid.Row="1" IsDirectionReversed="True" Focusable="False">
+                                <Track.Thumb>
+                                    <Thumb x:Name="Thumb" Background="#64748b" BorderThickness="0" Width="8" Opacity="0.5">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="4"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Border Background="#99000000" MouseDown="Background_MouseDown"/>
+
+        <!-- Main Card -->
+        <Border x:Name="MainBorder" Width="1000" Height="750" Background="#111722" CornerRadius="24" BorderBrush="{StaticResource BorderColor}" BorderThickness="1" ClipToBounds="True" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <ScaleTransform x:Name="MainScale"/>
+            </Border.RenderTransform>
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="60" ShadowDepth="20" Opacity="0.8"/>
+            </Border.Effect>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Panel: Cover & Details -->
+                <Border Grid.Column="0" Background="#0c111a" BorderBrush="{StaticResource BorderColor}" BorderThickness="0,0,1,0" CornerRadius="24,0,0,24">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Cover Image -->
+                        <Border Grid.Row="0" Margin="30,40,30,30" CornerRadius="12" BorderBrush="#33FFFFFF" BorderThickness="1" Height="400">
+                             <Border.Effect>
+                                <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="5" Opacity="0.5"/>
+                            </Border.Effect>
+                            <Border CornerRadius="12" ClipToBounds="True" Background="#0f1115">
+                                <Image x:Name="ImgCover" Stretch="UniformToFill" Source="{Binding CoverImageUrl}" ImageFailed="ImgCover_ImageFailed"/>
+                            </Border>
+                        </Border>
+
+                        <!-- Details -->
+                        <StackPanel Grid.Row="1" Margin="30,0,30,30">
+                            <TextBlock Text="DETAYLAR" Foreground="{StaticResource TextGray}" FontSize="11" FontWeight="Bold" Margin="0,0,0,15"/>
+                            
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Sayfa Sayısı" Foreground="{StaticResource TextGray}" FontSize="13"/>
+                                <TextBlock Grid.Column="1" Text="{Binding PageCount}" Foreground="White" HorizontalAlignment="Right" FontSize="13"/>
+                            </Grid>
+                            
+                             <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Yayınevi" Foreground="{StaticResource TextGray}" FontSize="13"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Publisher}" Foreground="White" HorizontalAlignment="Right" FontSize="13" TextTrimming="CharacterEllipsis" MaxWidth="150"/>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="ISBN" Foreground="{StaticResource TextGray}" FontSize="13"/>
+                                <TextBlock Grid.Column="1" Text="{Binding ISBN}" Foreground="White" HorizontalAlignment="Right" FontSize="13"/>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Dil" Foreground="{StaticResource TextGray}" FontSize="13"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Language}" Foreground="White" HorizontalAlignment="Right" FontSize="13"/>
+                            </Grid>
+                            
+                            <!-- Favorite Button -->
+                            <Border x:Name="BtnFavorite" Height="44" CornerRadius="10" Background="#374151" 
+                                    Cursor="Hand" MouseLeftButtonUp="BtnFavorite_Click" Margin="0,10,0,0">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#4B5563"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock x:Name="TxtFavoriteIcon" Text="🤍" FontSize="18" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock x:Name="TxtFavoriteLabel" Text="Favorilere Ekle" Foreground="White" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Right Panel: Content -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Grid Grid.Row="0" Margin="30,30,30,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Title}" FontSize="28" FontWeight="Bold" Foreground="White" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{Binding Authors}" Foreground="{StaticResource TextGray}" FontSize="16" Margin="0,5,0,0"/>
+                        </StackPanel>
+                        <dx:SimpleButton Grid.Column="1" Width="30" Height="30" Background="Transparent" 
+                                         Glyph="/ZImages/close.svg" Cursor="Hand" Click="BtnClose_Click" 
+                                         Opacity="0.7" GlyphHeight="24" GlyphWidth="24" VerticalAlignment="Top"/>
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,5,0">
+                        <StackPanel Margin="30,0,30,30">
+                            
+                            <!-- Row 1: Status & Rating -->
+                            <Grid Margin="0,0,0,25">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Durum" Foreground="{StaticResource TextGray}" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"/>
+                                    <Border Height="48" CornerRadius="8" Background="#192233" BorderBrush="#324467" BorderThickness="1">
+                                        <dxe:ComboBoxEdit EditValue="{Binding Status}" ShowBorder="False" Background="Transparent" Foreground="White" 
+                                                          IsTextEditable="False" AllowDefaultButton="False" ItemContainerStyle="{StaticResource DarkComboItemStyle}"
+                                                          VerticalContentAlignment="Center" Padding="10,0">
+                                            <dxe:ComboBoxEditItem Content="Okunuyor"/>
+                                            <dxe:ComboBoxEditItem Content="Okundu"/>
+                                            <dxe:ComboBoxEditItem Content="Okunacak"/>
+                                            <dxe:ComboBoxEditItem Content="Yarım Bırakıldı"/>
+                                        </dxe:ComboBoxEdit>
+                                    </Border>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Kişisel Puanın" Foreground="{StaticResource TextGray}" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"/>
+                                    <dx:SimpleButton x:Name="BtnStarSelect" Height="48" Background="#192233" Foreground="White" CornerRadius="8" 
+                                                     FontSize="13" Cursor="Hand" Padding="14,0" BorderThickness="1" BorderBrush="#324467" Click="BtnStarSelect_Click">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <TextBlock Text="★" Foreground="#fbbf24" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                            <TextBlock x:Name="TxtStarRating" VerticalAlignment="Center" Text="{Binding UserRating, StringFormat={}{0:0}/10}"/>
+                                        </StackPanel>
+                                    </dx:SimpleButton>
+                                    <!-- Yıldız Popup -->
+                                    <Popup x:Name="StarPopup" PlacementTarget="{Binding ElementName=BtnStarSelect}" Placement="Bottom" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade" VerticalOffset="4">
+                                        <Border Background="#1f2937" CornerRadius="10" Padding="10" BorderBrush="#334155" BorderThickness="1">
+                                            <ItemsControl x:Name="StarItems">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="★" FontSize="20" Margin="4,0" Cursor="Hand" Foreground="#64748b"
+                                                                   MouseEnter="Star_MouseEnter" MouseLeave="Star_MouseLeave" MouseLeftButtonDown="Star_MouseLeftButtonUp" Tag="{Binding}"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Border>
+                                    </Popup>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Row 2: Dates -->
+                            <Grid Margin="0,0,0,25">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Başlangıç Tarihi" Foreground="{StaticResource TextGray}" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"/>
+                                    <Border Height="48" CornerRadius="8" Background="#192233" BorderBrush="#324467" BorderThickness="1">
+                                         <Grid>
+                                            <dx:DXImage Source="{dx:DXImage 'SvgImages/Scheduling/Calendar.svg'}" Width="18" HorizontalAlignment="Left" Margin="12,0,0,0" Opacity="0.7" Panel.ZIndex="1"/>
+                                            <dxe:DateEdit EditValue="{Binding StartDate}" ShowBorder="False" Height="48" Background="Transparent" Foreground="White" 
+                                                          AllowDefaultButton="False" NullText="gg.aa.yyyy" Margin="35,0,10,0" HorizontalContentAlignment="Left"/>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Bitiş Tarihi" Foreground="{StaticResource TextGray}" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"/>
+                                    <Border Height="48" CornerRadius="8" Background="#192233" BorderBrush="#324467" BorderThickness="1">
+                                         <Grid>
+                                            <dx:DXImage Source="{dx:DXImage 'SvgImages/Scheduling/Calendar.svg'}" Width="18" HorizontalAlignment="Left" Margin="12,0,0,0" Opacity="0.7" Panel.ZIndex="1"/>
+                                            <dxe:DateEdit EditValue="{Binding FinishDate}" ShowBorder="False" Height="48" Background="Transparent" Foreground="White" 
+                                                          AllowDefaultButton="False" NullText="gg.aa.yyyy" Margin="35,0,10,0" HorizontalContentAlignment="Left"/>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Row 3: Progress -->
+                            <StackPanel Margin="0,0,0,25">
+                                <TextBlock Text="Okuma İlerlemesi" Foreground="{StaticResource TextGray}" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"/>
+                                <Border Background="#192233" CornerRadius="12" BorderBrush="#324467" BorderThickness="1" Padding="15">
+                                    <StackPanel>
+                                        <Grid Margin="0,0,0,10">
+                                            <StackPanel Orientation="Horizontal">
+                                                <dxe:TextEdit EditValue="{Binding CurrentPage, Mode=TwoWay}" Width="80" Height="35" Background="#111722" Foreground="White" 
+                                                              HorizontalContentAlignment="Center" CornerRadius="8" MaskType="Numeric" Mask="d"
+                                                              BorderBrush="#324467" BorderThickness="1" Style="{StaticResource NoFocusTextEditStyle}"/>
+                                                <TextBlock Text="/ " Foreground="{StaticResource TextGray}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="14"/>
+                                                <TextBlock Text="{Binding PageCount}" Foreground="{StaticResource TextGray}" VerticalAlignment="Center" FontSize="14"/>
+                                                <TextBlock Text=" Sayfa" Foreground="{StaticResource TextGray}" VerticalAlignment="Center" FontSize="12" Opacity="0.7"/>
+                                            </StackPanel>
+                                            <Border Background="#232f48" CornerRadius="6" HorizontalAlignment="Right" Padding="8,4" Margin="0,0,5,22">
+                                                <TextBlock Text="{Binding ProgressPercentage, StringFormat={}{0}%}" Foreground="White" FontWeight="Bold" FontSize="12"/>
+                                            </Border>
+                                        </Grid>
+                                        <ProgressBar Height="6" MinHeight="6" MaxHeight="6" Style="{StaticResource AddBookProgressBarStyle}" Value="{Binding ProgressPercentage, Mode=OneWay}" Maximum="100"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Row 4: Personal Notes -->
+                            <StackPanel Margin="0,0,0,25">
+                                <TextBlock Text="Kişisel Notlar" Foreground="{StaticResource TextGray}" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"/>
+                                <Border Height="120" Background="#192233" BorderBrush="#324467" BorderThickness="1" CornerRadius="8">
+                                    <dxe:TextEdit Text="{Binding UserNotes}" ShowBorder="False" VerticalContentAlignment="Top" 
+                                                  Background="Transparent" Foreground="White" 
+                                                  TextWrapping="Wrap" AcceptsReturn="True" Padding="12"
+                                                  NullText="Kitap hakkında aklında kalanlar..." Style="{StaticResource NoFocusTextEditStyle}"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Row 5: Description -->
+                            <StackPanel>
+                                <TextBlock Text="KİTAP ÖZETİ" Foreground="{StaticResource TextGray}" FontSize="11" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Foreground="#cbd5e1" FontSize="14" LineHeight="24" Opacity="0.9"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </ScrollViewer>
+
+                     <!-- Footer Buttons -->
+                    <Border Grid.Row="2" Background="{StaticResource PanelDark}" BorderBrush="{StaticResource BorderColor}" BorderThickness="0,1,0,0" Padding="30,15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <dx:SimpleButton Content="Kitabı Sil" Height="40" Background="Transparent" Foreground="#ef4444" FontWeight="Bold" FontSize="13" 
+                                             Cursor="Hand" Click="BtnDelete_Click" Glyph="{dx:DXImage 'SvgImages/Icon Builder/Actions_Delete.svg'}" GlyphHeight="24" GlyphWidth="24"/>
+                            
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <dx:SimpleButton Content="Vazgeç" Width="100" Height="40" Margin="0,0,15,0"
+                                                 Background="Transparent" Foreground="{StaticResource TextGray}" FontWeight="SemiBold"
+                                                 Click="BtnClose_Click" Cursor="Hand" Glyph="/ZImages/close.svg" GlyphHeight="32" GlyphWidth="32">
+                                     <dx:SimpleButton.Template>
+                                        <ControlTemplate TargetType="dx:SimpleButton">
+                                            <Border x:Name="Border" Background="Transparent" CornerRadius="8" BorderThickness="1" BorderBrush="#334155">
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                     <dx:DXImage Source="{TemplateBinding Glyph}" Width="16" Height="16" Margin="0,0,8,0" 
+                                                    Visibility="{Binding Glyph, RelativeSource={RelativeSource TemplatedParent}, Converter={dx:NullableToVisibilityConverter}}"/>
+                                                    <ContentPresenter/>
+                                                </StackPanel>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Border" Property="Background" Value="#334155"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </dx:SimpleButton.Template>
+                                </dx:SimpleButton>
+
+                                <dx:SimpleButton Content="Kaydet" Width="140" Height="40"
+                                                 Background="{StaticResource PrimaryBlue}" Foreground="White" CornerRadius="8" FontWeight="Bold"
+                                                 Glyph="/ZImages/save.svg" Click="BtnSave_Click" Cursor="Hand" GlyphHeight="24" GlyphWidth="24"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+        
+        <!-- Custom Delete Confirmation Popup -->
+        <Grid x:Name="DeletePopupOverlay" Visibility="Collapsed">
+            <Border Background="#000000" Opacity="0.7"/>
+            <Border Background="#161d2a" CornerRadius="16" 
+                    Width="420" Height="200" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="30" ShadowDepth="10" Opacity="0.5"/>
+                </Border.Effect>
+                <Grid Margin="25">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Header -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                        <TextBlock Text="⚠️" FontSize="20" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Kitabı Sil" FontSize="18" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- Message -->
+                    <TextBlock Grid.Row="1" x:Name="TxtDeleteMessage" 
+                               Text="Bu kitabı silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
+                               Foreground="#92a4c9" FontSize="14" TextWrapping="Wrap" 
+                               VerticalAlignment="Center"/>
+                    
+                    <!-- Buttons -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                        <dx:SimpleButton Content="İptal" Width="100" Height="38" Margin="0,0,10,0"
+                                         Background="Transparent" Foreground="White" 
+                                         BorderBrush="{StaticResource BorderColor}" BorderThickness="1"
+                                         CornerRadius="8" FontSize="13" FontWeight="SemiBold" Cursor="Hand"
+                                         Click="BtnCancelDelete_Click"/>
+                        <dx:SimpleButton Content="Sil" Width="100" Height="38" 
+                                         Background="#DC2626" Foreground="White" 
+                                         CornerRadius="8" FontSize="13" FontWeight="SemiBold" Cursor="Hand"
+                                         Click="BtnConfirmDelete_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

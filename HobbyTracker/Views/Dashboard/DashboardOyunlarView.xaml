@@ -1,0 +1,653 @@
+<UserControl x:Class="HobbyTracker.Views.Dashboard.DashboardOyunlarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+
+    <UserControl.Resources>
+        <!-- Sayfa Yüklenme Animasyonu -->
+        <Storyboard x:Key="SlideUpFadeIn">
+            <DoubleAnimation Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.4"/>
+            <DoubleAnimation Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" From="20" To="0" Duration="0:0:0.4">
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <!-- Hover Efekti için Stil (DashboardView'dan esinlenildi) -->
+        <Style x:Key="StatsCardHoverStyle" TargetType="Border">
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.05" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.05" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Oyun Kartı Stili -->
+        <Style x:Key="GameCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#1e293b"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2d3a52"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#8b5cf6" BlurRadius="15" Opacity="0.3" ShadowDepth="0"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard Storyboard="{StaticResource SlideUpFadeIn}"/>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <Grid x:Name="RootGrid" RenderTransformOrigin="0.5,0.5">
+        <Grid.RenderTransform>
+            <TranslateTransform/>
+        </Grid.RenderTransform>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- OYUN İSTATİSTİKLERİ -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Toplam Oyun -->
+            <Border Grid.Column="0" CornerRadius="10" Padding="15" Margin="0,0,10,0" Style="{StaticResource StatsCardHoverStyle}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                         <GradientStop Color="#CC1e293b" Offset="0"/>
+                         <GradientStop Color="#0f1425" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#334155" Offset="0"/>
+                        <GradientStop Color="#60a5fa" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+                <Border.Effect>
+                    <DropShadowEffect Color="#60a5fa" BlurRadius="10" ShadowDepth="0" Opacity="0.1"/>
+                </Border.Effect>
+                <Border.BorderThickness>1</Border.BorderThickness>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="🎮" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Toplam Oyun" Foreground="#94a3b8" FontSize="11" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock x:Name="TotalGamesText" Text="0" Foreground="#60a5fa" FontSize="28" FontWeight="Bold"/>
+                    <TextBlock Text="Koleksiyonda" Foreground="#64748b" FontSize="10" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Tamamlanan -->
+            <Border Grid.Column="1" CornerRadius="10" Padding="15" Margin="0,0,10,0" Style="{StaticResource StatsCardHoverStyle}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                         <GradientStop Color="#CC1e293b" Offset="0"/>
+                         <GradientStop Color="#0f1425" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#334155" Offset="0"/>
+                        <GradientStop Color="#10b981" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+                <Border.Effect>
+                    <DropShadowEffect Color="#10b981" BlurRadius="10" ShadowDepth="0" Opacity="0.1"/>
+                </Border.Effect>
+                <Border.BorderThickness>1</Border.BorderThickness>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="✅" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Tamamlanan" Foreground="#94a3b8" FontSize="11" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="FinishedGamesText" Text="0" Foreground="#10b981" FontSize="28" FontWeight="Bold"/>
+                        <TextBlock Text="↗" Foreground="#10b981" FontSize="12" Margin="6,0,0,0" VerticalAlignment="Center" Opacity="0.8"/>
+                    </StackPanel>
+                    <TextBlock x:Name="CompletionRateText" Text="%0 tamamlanma" Foreground="#64748b" FontSize="10" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Oynuyor -->
+            <Border Grid.Column="2" CornerRadius="10" Padding="15" Margin="0,0,10,0" Style="{StaticResource StatsCardHoverStyle}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                         <GradientStop Color="#CC1e293b" Offset="0"/>
+                         <GradientStop Color="#0f1425" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#334155" Offset="0"/>
+                        <GradientStop Color="#ef4444" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+                <Border.Effect>
+                    <DropShadowEffect Color="#ef4444" BlurRadius="10" ShadowDepth="0" Opacity="0.1"/>
+                </Border.Effect>
+                <Border.BorderThickness>1</Border.BorderThickness>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="🕹️" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Oynanıyor" Foreground="#94a3b8" FontSize="11" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock x:Name="PlayingGamesText" Text="0" Foreground="#ef4444" FontSize="28" FontWeight="Bold"/>
+                    <TextBlock Text="Aktif oyun" Foreground="#64748b" FontSize="10" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Ortalama Puan -->
+            <Border Grid.Column="4" CornerRadius="10" Padding="15" Style="{StaticResource StatsCardHoverStyle}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                         <GradientStop Color="#CC1e293b" Offset="0"/>
+                         <GradientStop Color="#0f1425" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#334155" Offset="0"/>
+                        <GradientStop Color="#fbbf24" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+                <Border.Effect>
+                    <DropShadowEffect Color="#fbbf24" BlurRadius="10" ShadowDepth="0" Opacity="0.1"/>
+                </Border.Effect>
+                <Border.BorderThickness>1</Border.BorderThickness>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="⭐" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Ort. Puan" Foreground="#94a3b8" FontSize="11" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="AvgRatingText" Text="0" Foreground="#fbbf24" FontSize="28" FontWeight="Bold"/>
+                        <TextBlock Text="/10" Foreground="#fbbf24" FontSize="12" VerticalAlignment="Bottom" Margin="2,0,0,4" Opacity="0.7"/>
+                    </StackPanel>
+                    <TextBlock Text="Kullanıcı puanı" Foreground="#64748b" FontSize="10" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Toplam Süre -->
+            <Border Grid.Column="3" CornerRadius="10" Padding="15" Margin="0,0,10,0" Style="{StaticResource StatsCardHoverStyle}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                         <GradientStop Color="#CC1e293b" Offset="0"/>
+                         <GradientStop Color="#0f1425" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#334155" Offset="0"/>
+                        <GradientStop Color="#a78bfa" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+                <Border.Effect>
+                    <DropShadowEffect Color="#a78bfa" BlurRadius="10" ShadowDepth="0" Opacity="0.1"/>
+                </Border.Effect>
+                <Border.BorderThickness>1</Border.BorderThickness>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="⏱️" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Toplam Süre" Foreground="#94a3b8" FontSize="11" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="TotalPlayTimeText" Text="0" Foreground="#a78bfa" FontSize="28" FontWeight="Bold"/>
+                        <TextBlock Text="sa" Foreground="#a78bfa" FontSize="12" VerticalAlignment="Bottom" Margin="2,0,0,4" Opacity="0.7"/>
+                    </StackPanel>
+                    <TextBlock Text="Harcanan süre" Foreground="#64748b" FontSize="10" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- SON OYNANANLAR + TÜR DAĞILIMI -->
+        <Grid Grid.Row="1" Margin="0,0,0,25">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="350"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Son Eklenen Oyunlar -->
+            <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                <Grid Margin="0,0,0,15">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="✨" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Son Eklenenler" Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- Tümünü Gör Butonu -->
+                    <Button HorizontalAlignment="Right" VerticalAlignment="Center" 
+                            Background="Transparent" BorderThickness="0" Cursor="Hand"
+                            Click="ViewAllGames_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <TextBlock Text="Tümünü Gör" Foreground="#3b82f6" FontSize="12" FontWeight="SemiBold">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="TextDecorations" Value="Underline"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+
+                <ItemsControl x:Name="RecentGamesControl">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Geniş Kart Tasarımı (Kaldığın Yerden Devam Et Stili) -->
+                            <Border Width="200" Margin="0,0,15,0" Padding="0" Background="#1e293b" CornerRadius="12" Cursor="Hand"
+                                    PreviewMouseLeftButtonDown="OpenGameDetails_Click">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Kapak Resmi (Geniş) -->
+                                    <Border Grid.Row="0" Height="110" CornerRadius="12,12,0,0">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{Binding CoverImageUrl}" Stretch="UniformToFill"/>
+                                        </Border.Background>
+                                        
+                                        <!-- Platform Badge -->
+                                        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+                                                Background="#8b5cf6" CornerRadius="4" Padding="6,3">
+                                            <TextBlock Text="{Binding Platform}" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                        </Border>
+                                    </Border>
+
+                                    <!-- Başlık ve Bilgi -->
+                                    <StackPanel Grid.Row="1" Margin="12,10,12,12">
+                                        <TextBlock Text="{Binding Title}" Foreground="White" FontWeight="SemiBold" 
+                                                   TextTrimming="CharacterEllipsis" FontSize="13" Margin="0,0,0,4"/>
+                                        
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="📅" FontSize="10" Margin="0,0,5,0" VerticalAlignment="Center" Opacity="0.7"/>
+                                            <TextBlock Text="{Binding ReleaseYear}" Foreground="#94a3b8" FontSize="11"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Boş Durum -->
+                <!-- Boş Durum -->
+                <Border x:Name="EmptyGamesState" Padding="40" Visibility="Collapsed" Background="#1e293b" CornerRadius="12">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="🎮" FontSize="40" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Henüz oyun eklenmemiş" Foreground="#94a3b8" FontSize="14" 
+                                   Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Platform Dağılımı (Bar Chart) - Yeni Konum -->
+                <StackPanel Margin="0,25,20,0">
+                    <Grid Margin="0,0,0,15">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📊" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Platform Dağılımı" Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Border CornerRadius="16" Padding="20">
+                        <!-- Glassmorphism Background -->
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1a1f35" Offset="0"/>
+                                <GradientStop Color="#141a2e" Offset="0.5"/>
+                                <GradientStop Color="#0f1425" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <!-- Neon Border Glow (Mor) -->
+                        <Border.BorderBrush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#303b5c" Offset="0"/>
+                                <GradientStop Color="#1e2847" Offset="0.5"/>
+                                <GradientStop Color="#8b5cf6" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                        <Border.BorderThickness>1</Border.BorderThickness>
+                        <Border.Effect>
+                            <DropShadowEffect Color="#8b5cf6" BlurRadius="20" Opacity="0.15" ShadowDepth="0"/>
+                        </Border.Effect>
+
+                        <Grid>
+                            <!-- Chart Control -->
+                            <dxc:ChartControl x:Name="PlatformChart" 
+                                              Background="Transparent" 
+                                              BorderThickness="0" 
+                                              MinHeight="250"
+                                              BorderBrush="{x:Null}">
+                                <dxc:XYDiagram2D Rotated="True">
+                                    <dxc:XYDiagram2D.DefaultPane>
+                                        <dxc:Pane DomainBrush="Transparent" DomainBorderBrush="{x:Null}"/>
+                                    </dxc:XYDiagram2D.DefaultPane>
+                                    
+                                    <dxc:XYDiagram2D.AxisX>
+                                        <dxc:AxisX2D TickmarksVisible="False" GridLinesVisible="False">
+                                            <dxc:AxisX2D.Label>
+                                                <dxc:AxisLabel Foreground="White" FontSize="12"/>
+                                            </dxc:AxisX2D.Label>
+                                        </dxc:AxisX2D>
+                                    </dxc:XYDiagram2D.AxisX>
+                                    
+                                    <dxc:XYDiagram2D.AxisY>
+                                        <dxc:AxisY2D Visible="False" GridLinesVisible="False" Interlaced="False"/>
+                                    </dxc:XYDiagram2D.AxisY>
+
+                                    <dxc:BarSideBySideSeries2D x:Name="PlatformSeries" 
+                                                               DisplayName="Platformlar" 
+                                                               ColorEach="True"
+                                                               LabelsVisibility="True"
+                                                               BarWidth="0.6">
+                                        <dxc:BarSideBySideSeries2D.Label>
+                                            <dxc:SeriesLabel TextPattern="{}{V}" Foreground="White" FontSize="12" ResolveOverlappingMode="Default"/>
+                                        </dxc:BarSideBySideSeries2D.Label>
+                                        <dxc:BarSideBySideSeries2D.Model>
+                                            <dxc:BorderlessSimpleBar2DModel/>
+                                        </dxc:BarSideBySideSeries2D.Model>
+                                    </dxc:BarSideBySideSeries2D>
+                                </dxc:XYDiagram2D>
+                            </dxc:ChartControl>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Tür Dağılımı Grafiği - Donut Style (Futuristik Glassmorphism) -->
+            <Border Grid.Column="1" CornerRadius="16" Padding="20">
+                <!-- Glassmorphism Background -->
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1a1f35" Offset="0"/>
+                        <GradientStop Color="#141a2e" Offset="0.5"/>
+                        <GradientStop Color="#0f1425" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <!-- Neon Border Glow (Mor) -->
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#303b5c" Offset="0"/>
+                        <GradientStop Color="#1e2847" Offset="0.5"/>
+                        <GradientStop Color="#8b5cf6" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+                <Border.BorderThickness>1</Border.BorderThickness>
+                <Border.Effect>
+                    <DropShadowEffect Color="#8b5cf6" BlurRadius="20" Opacity="0.15" ShadowDepth="0"/>
+                </Border.Effect>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Başlık -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <Border CornerRadius="6" Padding="6,4" Margin="0,0,10,0">
+                            <TextBlock Text="📊" FontSize="14" Foreground="White"/>
+                        </Border>
+                        <TextBlock Text="Tür Dağılımı" Foreground="White" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Donut Chart -->
+                    <dxc:ChartControl x:Name="GenreChart" Grid.Row="1" 
+                                      Background="Transparent" BorderThickness="0" 
+                                      MinHeight="180" Margin="0,10,0,10" BorderBrush="{x:Null}"
+                                      ToolTipEnabled="True">
+                        <dxc:SimpleDiagram2D>
+                            <dxc:NestedDonutSeries2D x:Name="GenreSeries" 
+                                                      HoleRadiusPercent="55"
+                                                      LabelsVisibility="False"
+                                                      LegendTextPattern="{}{A}"
+                                                      ToolTipPointPattern="{}{A}: {V}">
+                            </dxc:NestedDonutSeries2D>
+                        </dxc:SimpleDiagram2D>
+                        <dxc:ChartControl.Legend>
+                            <dxc:Legend Visible="False"/>
+                        </dxc:ChartControl.Legend>
+                    </dxc:ChartControl>
+
+                    <!-- Legend - Manuel -->
+                    <ItemsControl x:Name="GenreLegend" Grid.Row="2">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="8,4">
+                                    <Ellipse Width="10" Height="10" Margin="0,0,6,0">
+                                        <Ellipse.Fill>
+                                            <SolidColorBrush Color="{Binding Color}"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock Text="{Binding Name}" Foreground="#94a3b8" FontSize="11"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- YENİ PANELLER SATIRI (Favoriler & Uzun Süreli) -->
+        <Grid Grid.Row="2" Margin="0,20,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- SOL PANEL: Favori Oyunlar (Carousel) -->
+            <Border Grid.Column="0" CornerRadius="16" Cursor="Hand" MouseLeftButtonDown="CurrentFavorite_Click">
+                <Border.Background>
+                    <ImageBrush ImageSource="{Binding CurrentFavoriteGame.CoverImageUrl}" Stretch="UniformToFill" Opacity="0.4"/>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="20" Opacity="0.5"/>
+                </Border.Effect>
+                <Grid>
+                    <Border Background="#CC0f172a" CornerRadius="16"/>
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Navigasyon Butonları (Overlay) -->
+                        <Button Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-10,0,0,0"
+                                Background="Transparent" BorderThickness="0" Cursor="Hand" Click="PrevFavorite_Click">
+                            <TextBlock Text="❮" Foreground="White" FontSize="20" FontWeight="Bold" Opacity="0.7"/>
+                        </Button>
+                        <Button Grid.RowSpan="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-10,0"
+                                Background="Transparent" BorderThickness="0" Cursor="Hand" Click="NextFavorite_Click">
+                            <TextBlock Text="❯" Foreground="White" FontSize="20" FontWeight="Bold" Opacity="0.7"/>
+                        </Button>
+
+                        <!-- Header -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                            <TextBlock Text="❤️" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Favori Oyunlar" Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Yıl Badge (Sağ Üst) -->
+                         <Border Grid.Row="0" HorizontalAlignment="Right" Background="#334155" CornerRadius="6" Padding="8,4"
+                                 Visibility="{Binding HasNoFavorites, Converter={dx:BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                            <TextBlock Text="{Binding CurrentFavoriteGame.ReleaseYear}" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                         </Border>
+
+                        <!-- Oyun Bilgisi -->
+                        <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="15">
+                            <TextBlock Text="{Binding CurrentFavoriteGame.Title}" Foreground="White" FontSize="24" FontWeight="Black" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                            <TextBlock Foreground="#94a3b8" FontSize="13">
+                                <Run Text="{Binding CurrentFavoriteGame.Developer}"/>
+                                <Run Text=" • "/>
+                                <Run Text="{Binding CurrentFavoriteGame.Genres}"/>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <!-- Alt İstatistikler -->
+                        <Grid Grid.Row="2" Margin="15,0,15,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                                <TextBlock Text="TOPLAM SÜRE" Foreground="#94a3b8" FontSize="9" FontWeight="Bold"/>
+                                <TextBlock Foreground="#60a5fa" FontSize="18" FontWeight="Bold">
+                                    <Run Text="{Binding CurrentFavoriteGame.PlayTime}"/>
+                                    <Run Text="sa" FontSize="12" Foreground="#94a3b8" FontWeight="Normal"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="KİŞİSEL PUAN" Foreground="#94a3b8" FontSize="9" FontWeight="Bold"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="★" Foreground="#fbbf24" FontSize="14" Margin="0,0,4,0"/>
+                                    <TextBlock Text="{Binding CurrentFavoriteGame.UserRating}" Foreground="White" FontSize="18" FontWeight="Bold"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="Detayları Gör" Foreground="#60a5fa" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Text="→" Foreground="#60a5fa" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Boş Durum -->
+                        <TextBlock Grid.Row="1" Text="Henüz favori oyun eklenmemiş." 
+                                   Foreground="#64748b" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Visibility="{Binding HasNoFavorites, Converter={dx:BooleanToVisibilityConverter}}"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- SAĞ PANEL: En Uzun Süre -->
+            <Border Grid.Column="2" CornerRadius="16" Cursor="Hand" MouseLeftButtonDown="LongestGame_Click">
+                <Border.Background>
+                    <ImageBrush ImageSource="{Binding LongestPlayedGame.CoverImageUrl}" Stretch="UniformToFill" Opacity="0.4"/>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="20" Opacity="0.5"/>
+                </Border.Effect>
+                <Grid>
+                    <Border Background="#CC0f172a" CornerRadius="16"/>
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" HorizontalAlignment="Left" Background="#fbbf24" CornerRadius="6" Padding="8,4">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🏆" FontSize="12" Margin="0,0,5,0"/>
+                                <TextBlock Text="En Uzun Serüven" Foreground="Black" FontSize="11" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Border>
+                         <Border Grid.Row="0" HorizontalAlignment="Right" Background="#334155" CornerRadius="6" Padding="8,4">
+                            <TextBlock Text="{Binding LongestPlayedGame.ReleaseYear}" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                         </Border>
+                        <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,15">
+                            <TextBlock Text="{Binding LongestPlayedGame.Title}" Foreground="White" FontSize="20" FontWeight="Black" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                            <TextBlock Foreground="#94a3b8" FontSize="12">
+                                <Run Text="{Binding LongestPlayedGame.Developer}"/>
+                                <Run Text=" • "/>
+                                <Run Text="{Binding LongestPlayedGame.Genres}"/>
+                            </TextBlock>
+                        </StackPanel>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                                <TextBlock Text="TOPLAM SÜRE" Foreground="#94a3b8" FontSize="9" FontWeight="Bold"/>
+                                <TextBlock Foreground="#60a5fa" FontSize="18" FontWeight="Bold">
+                                    <Run Text="{Binding LongestPlayedGame.PlayTime}"/>
+                                    <Run Text="sa" FontSize="12" Foreground="#94a3b8" FontWeight="Normal"/>
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="KİŞİSEL PUAN" Foreground="#94a3b8" FontSize="9" FontWeight="Bold"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="★" Foreground="#fbbf24" FontSize="14" Margin="0,0,4,0"/>
+                                    <TextBlock Text="{Binding LongestPlayedGame.UserRating}" Foreground="White" FontSize="18" FontWeight="Bold"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="Detayları Gör" Foreground="#60a5fa" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Text="→" Foreground="#60a5fa" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
